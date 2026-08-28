@@ -1,0 +1,63 @@
+% !TeX root = ../main.tex
+\chapter{Mô hình baseline}
+\label{chap:baseline}
+
+\section{Quy trình huấn luyện và kiểm thử}
+
+Dataset được chia một lần theo tỷ lệ 80/20 với
+\texttt{random\_state=42} và \texttt{stratify=y}. Tập training gồm 455 mẫu
+(170 malignant, 285 benign); tập test gồm 114 mẫu (42 malignant, 72 benign).
+Baseline là \texttt{DecisionTreeClassifier} với cấu hình mặc định và seed cố
+định, không chứa tuning ngầm.
+
+Tất cả mô hình cải thiện dùng chính split này. Việc chọn hyperparameter thực
+hiện bằng 5-fold cross-validation trên 455 mẫu training. Đây là biện pháp tránh
+data leakage do nhìn kết quả test nhiều lần trong quá trình tuning.
+
+\section{Kết quả baseline}
+
+\begin{table}[H]
+\centering
+\caption{Hiệu năng mô hình baseline trên tập test}
+\label{tab:baseline-metrics}
+\begin{tabular}{lc}
+\toprule
+Metric & Giá trị \\
+\midrule
+Training accuracy & 1,0000 \\
+Testing accuracy & 0,9123 \\
+Error rate & 0,0877 \\
+Weighted precision & 0,9161 \\
+Weighted recall & 0,9123 \\
+Weighted F1-score & 0,9130 \\
+Malignant precision & 0,8478 \\
+Malignant recall & 0,9286 \\
+Malignant F1-score & 0,8864 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Accuracy test bằng 91,23\%, tương ứng error rate 8,77\%. Baseline phân loại
+đúng 104/114 mẫu. Confusion matrix ở Hình~\ref{fig:baseline-cm} cho thấy mô
+hình nhận đúng 39/42 ca malignant và 65/72 ca benign; có 3 ca malignant bị dự
+đoán thành benign và 7 ca benign bị dự đoán thành malignant.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{baseline_confusion_matrix.png}
+\caption{Confusion matrix của Decision Tree baseline}
+\label{fig:baseline-cm}
+\end{figure}
+
+\section{Cây kết quả}
+
+Cây đầy đủ có depth 7, 19 leaf và 37 node. Vì hình đầy đủ khó đọc khi thu nhỏ,
+Hình~\ref{fig:baseline-readable} trình bày bốn tầng đầu để phục vụ phân tích;
+file \texttt{baseline\_tree\_full.png} được giữ trong gói kết quả kỹ thuật.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{baseline_tree_readable.png}
+\caption{Cấu trúc dễ đọc của baseline (giới hạn phần hiển thị ở ba mức sâu)}
+\label{fig:baseline-readable}
+\end{figure}

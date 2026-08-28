@@ -1,0 +1,57 @@
+% !TeX root = ../main.tex
+\chapter{So sánh và thảo luận kết quả}
+\label{chap:comparison}
+
+\section{Bảng so sánh}
+
+Tất cả số liệu trong Bảng~\ref{tab:model-comparison} được sinh tự động từ các
+model output và lưu tại \path{results/model_comparison.csv}.
+
+\begin{table}[H]
+\centering
+\caption{So sánh baseline và ba mô hình cải thiện}
+\label{tab:model-comparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+Model & Train Acc. & Test Acc. & Error & Weighted F1 & Mal. Prec. & Mal. Recall & Depth & Leaves \\
+\midrule
+Baseline & 1,0000 & 0,9123 & 0,0877 & 0,9130 & 0,8478 & 0,9286 & 7 & 19 \\
+Max Depth & 0,9868 & \textbf{0,9386} & \textbf{0,0614} & \textbf{0,9387} & 0,9070 & \textbf{0,9286} & 4 & 11 \\
+Min Samples Leaf & 0,9802 & 0,9123 & 0,0877 & 0,9127 & 0,8636 & 0,9048 & 6 & 13 \\
+Pruning & 0,9736 & \textbf{0,9386} & \textbf{0,0614} & 0,9384 & \textbf{0,9268} & 0,9048 & \textbf{3} & \textbf{6} \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{model_comparison.png}
+\caption{Trade-off giữa accuracy và số leaf của các mô hình}
+\label{fig:model-comparison}
+\end{figure}
+
+\section{Mô hình tốt nhất}
+
+Max Depth và Pruning cùng đạt test accuracy 93,86\% và error rate 6,14\%.
+Notebook không dùng thứ tự dòng để xử lý tie mà áp dụng quy tắc minh bạch: ưu
+tiên malignant recall, sau đó weighted F1 và độ đơn giản. Với bài toán chẩn
+đoán, bỏ sót malignant là loại lỗi đáng chú ý hơn.
+
+Max Depth được chọn làm mô hình chính vì malignant recall 92,86\%, cao hơn
+90,48\% của Pruning, đồng thời weighted F1 nhỉnh hơn (93,87\% so với 93,84\%).
+Nói cách khác, Max Depth phát hiện thêm một ca malignant trên test set trong
+khi tổng số dự đoán sai vẫn bằng Pruning.
+
+\section{Trade-off và ý nghĩa}
+
+Pruning là phương án cạnh tranh mạnh khi khả năng diễn giải hoặc kích thước mô
+hình được ưu tiên: chỉ 6 leaf và depth 3, so với 11 leaf và depth 4 của Max
+Depth. Pruning cũng có malignant precision cao hơn, nghĩa là tỷ lệ dự đoán
+malignant đúng cao hơn trong số các ca bị gắn nhãn malignant. Vì vậy, kết luận
+không phải một phương pháp luôn tốt hơn; lựa chọn phụ thuộc chi phí của từng
+loại lỗi và yêu cầu về độ đơn giản.
+
+Min Samples Leaf cho thấy một ``improvement method'' không nhất thiết phải tăng
+accuracy. Giá trị học thuật nằm ở quy trình thử nghiệm, đo lường và giải thích:
+phương pháp này giảm cây nhưng không giảm error trên test split hiện tại.

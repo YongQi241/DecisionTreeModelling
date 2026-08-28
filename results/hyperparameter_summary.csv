@@ -1,0 +1,4 @@
+Method,Selected Parameter,Best CV Accuracy
+Max Depth,max_depth=4,0.9384615384615385
+Min Samples Leaf,min_samples_leaf=3,0.9362637362637363
+Pruning,ccp_alpha=0.005934,0.934065934065934

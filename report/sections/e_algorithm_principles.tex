@@ -1,0 +1,56 @@
+% !TeX root = ../main.tex
+\chapter{Phân tích cây baseline}
+\label{chap:tree-analysis}
+
+\section{Cấu trúc và dấu hiệu overfitting}
+
+Baseline đạt training accuracy 100\% nhưng test accuracy chỉ 91,23\%, tạo
+khoảng cách 8,77 điểm phần trăm. Kết hợp với depth 7 và 19 leaf, kết quả cho
+thấy cây không ràng buộc đã học các chi tiết đặc thù của training set. Đây là
+bằng chứng định lượng cho nguy cơ overfitting, không chỉ là nhận xét dựa trên
+kích thước hình cây.
+
+Một số nhánh sâu phục vụ rất ít mẫu. Các leaf nhỏ giúp cây sửa hết lỗi trên
+training nhưng có độ tin cậy thấp khi áp dụng cho dữ liệu chưa quan sát. Do đó,
+ba cải thiện ở Chương~\ref{chap:improvements} đều điều chỉnh trực tiếp độ phức
+tạp của cấu trúc.
+
+\section{Các node và luật quyết định quan trọng}
+
+Root node sử dụng điều kiện
+\begin{center}
+\texttt{worst radius $\leq$ 16.80}.
+\end{center}
+Điều này cho thấy kích thước lớn nhất của nhân tế bào là đặc trưng tách lớp
+quan trọng nhất trên training split hiện tại. Với nhánh thỏa điều kiện, cây tiếp
+tục xét \texttt{worst concave points $\leq$ 0.14}; sau đó có thể xét
+\texttt{area error}. Ở nhánh \texttt{worst radius $>$ 16.80}, một split sớm
+dùng \texttt{texture error $\leq$ 0.47}, rồi kết hợp \texttt{worst concavity}.
+
+Các rule này không phải luật y khoa phổ quát; chúng là pattern học được trên
+training split. Tuy nhiên, việc các feature về kích thước, độ lõm và texture
+xuất hiện sớm cho thấy cây đang kết hợp nhiều nhóm hình thái thay vì dựa vào
+một feature duy nhất.
+
+\section{Feature importance}
+
+\texttt{worst radius} chiếm khoảng 69,78\% tổng feature importance của
+baseline. Các feature tiếp theo gồm \texttt{worst concave points} (11,61\%),
+\texttt{worst texture} (5,89\%) và \texttt{texture error} (5,27\%). Hình
+\ref{fig:feature-importance} trình bày mười feature đứng đầu.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\textwidth]{baseline_feature_importance.png}
+\caption{Mười feature quan trọng nhất của baseline}
+\label{fig:feature-importance}
+\end{figure}
+
+\section{Điểm mạnh và điểm yếu}
+
+Điểm mạnh của baseline là accuracy khá cao, malignant recall 92,86\% và các
+quyết định có thể truy vết bằng threshold. Điểm yếu là training accuracy tuyệt
+đối, khoảng cách train--test lớn và cây sâu hơn mức cần thiết. Vì feature
+importance tập trung mạnh vào một biến, kết luận cũng có thể thay đổi khi dùng
+split khác; báo cáo vì vậy giữ seed cố định và không khẳng định rule là chân lý
+lâm sàng.

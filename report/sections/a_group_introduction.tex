@@ -1,0 +1,59 @@
+% !TeX root = ../main.tex
+\chapter{Giới thiệu nhóm}
+\label{chap:group}
+
+\section{Thông tin nhóm}
+
+Nhóm 9 gồm bốn sinh viên lớp 24C03, thực hiện Lab 2 của học phần Nhập môn
+Trí tuệ nhân tạo với chủ đề xây dựng, phân tích và cải thiện mô hình Cây quyết
+định (Decision Tree). Thông tin thành viên được giữ nhất quán với hồ sơ nhóm.
+
+\begin{table}[H]
+\centering
+\caption{Danh sách thành viên Nhóm 9}
+\label{tab:members}
+\begin{tabular}{clcl}
+\toprule
+STT & Họ và tên & MSSV & Vai trò theo kế hoạch \\
+\midrule
+1 & Nguyễn Gia & 24127357 & A -- Technical Owner \\
+2 & Trần Thiên Phú & 24127490 & B -- Report Writer 1 \\
+3 & Nguyễn Anh Tá & 24127117 & C -- Analyst / Report Writer 2 \\
+4 & Đỗ Vĩnh Kỳ & 24127434 & D -- Integrator / Presentation Owner \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Đóng góp cụ thể}
+
+Nhóm chia công việc theo một nguồn số liệu duy nhất: notebook do thành viên A
+quản lý. Bảng~\ref{tab:contributions} trình bày trách nhiệm để tránh số liệu
+khác nhau giữa notebook, báo cáo và video.
+
+\begin{table}[H]
+\centering
+\caption{Phân công và đóng góp của từng thành viên}
+\label{tab:contributions}
+\begin{tabular}{p{3.2cm}p{10.8cm}}
+\toprule
+Thành viên & Nội dung đóng góp \\
+\midrule
+Nguyễn Gia & Xây dựng và khóa notebook kỹ thuật; baseline; ba phương pháp cải
+thiện; kiểm chứng metric; xuất bảng, hình và gói handoff tái lập. \\
+Trần Thiên Phú & Mô tả dataset, viết phần giới thiệu và phần baseline; kiểm tra
+nguồn dữ liệu và tài liệu tham khảo liên quan. \\
+Nguyễn Anh Tá & Phân tích cấu trúc cây, diễn giải các phương pháp cải thiện,
+so sánh kết quả và soạn kết luận kỹ thuật. \\
+Đỗ Vĩnh Kỳ & Tích hợp và định dạng báo cáo, chuẩn bị nội dung trình bày/video,
+kiểm tra file nộp và đóng gói phiên bản cuối. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Mục tiêu đầu ra}
+
+Báo cáo sử dụng trực tiếp các kết quả đã khóa trong
+\texttt{results/model\_comparison.csv}. Notebook, ảnh cây, confusion matrix,
+feature importance và bảng so sánh đều có thể được tái tạo bằng thao tác
+Restart Kernel và Run All. Các thành viên không thay đổi seed, cách chia dữ
+liệu hoặc tham số rồi đưa số liệu khác vào báo cáo/video.

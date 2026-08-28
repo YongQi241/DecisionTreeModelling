@@ -1,0 +1,46 @@
+% !TeX root = ../main.tex
+\chapter{Giới thiệu}
+\label{chap:introduction}
+
+\section{Cây quyết định}
+
+Cây quyết định là mô hình học có giám sát biểu diễn quá trình dự đoán bằng một
+chuỗi điều kiện dạng ``nếu--thì''. Tại mỗi node, thuật toán chọn một feature và
+một ngưỡng chia dữ liệu thành các nhóm có độ hỗn tạp nhỏ hơn. Với bài toán phân
+loại, node lá trả về lớp chiếm ưu thế trong các mẫu huấn luyện đi đến lá đó.
+
+Trong thí nghiệm này, mô hình sử dụng chỉ số Gini mặc định. Với tập mẫu tại
+node $t$, Gini impurity được xác định bởi
+\begin{equation}
+  G(t)=1-\sum_{k=1}^{K}p(k\mid t)^2,
+\end{equation}
+trong đó $p(k\mid t)$ là tỷ lệ mẫu lớp $k$ tại node. Một phép chia tốt làm giảm
+độ hỗn tạp có trọng số của hai node con.
+
+Ưu điểm quan trọng của Decision Tree là không cần chuẩn hóa dữ liệu, có thể học
+ranh giới phi tuyến và cho phép đọc trực tiếp các luật quyết định. Nhược điểm là
+một cây không bị ràng buộc dễ tạo các nhánh rất đặc thù cho tập training, dẫn
+đến phương sai cao và overfitting.
+
+\section{Mục tiêu dự án}
+
+Dự án áp dụng Decision Tree cho bài toán phân loại chẩn đoán khối u vú. Các
+mục tiêu cụ thể gồm:
+
+\begin{itemize}
+  \item lựa chọn và mô tả một dataset công khai, phù hợp cho phân loại;
+  \item xây dựng baseline trên một train/test split tái lập;
+  \item đánh giá bằng accuracy, error rate, precision, recall, F1 và confusion
+  matrix;
+  \item phân tích cấu trúc, feature và các luật chia quan trọng của cây;
+  \item thử độc lập ba cách cải thiện: giới hạn \texttt{max\_depth}, điều chỉnh
+  \texttt{min\_samples\_leaf} và cost-complexity pruning;
+  \item so sánh hiệu năng với độ phức tạp và chọn mô hình phù hợp nhất.
+\end{itemize}
+
+\section{Phạm vi và nguyên tắc đánh giá}
+
+Mục tiêu không chỉ là tìm con số accuracy lớn nhất. Báo cáo xem xét error rate,
+khả năng phát hiện lớp malignant, khoảng cách train--test và độ phức tạp của
+cây. Hyperparameter được chọn bằng cross-validation trên tập training; tập test
+chỉ dùng trong so sánh cuối cùng.

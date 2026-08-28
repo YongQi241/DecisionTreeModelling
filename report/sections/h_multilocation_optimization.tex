@@ -1,0 +1,41 @@
+% !TeX root = ../main.tex
+\chapter{Kết luận}
+\label{chap:conclusion}
+
+Nhóm đã xây dựng đầy đủ một quy trình Decision Tree cho Breast Cancer Wisconsin
+(Diagnostic): kiểm tra dữ liệu, chia train/test có stratification, huấn luyện
+baseline, trình bày cây, đánh giá nhiều metric, phân tích rule và thử ba cách
+regularization độc lập.
+
+Baseline đạt 91,23\% test accuracy nhưng có training accuracy 100\%, depth 7
+và 19 leaf. Khoảng cách train--test cho thấy cây không ràng buộc có nguy cơ
+overfit. Giới hạn \texttt{max\_depth=4} và cost-complexity pruning đều tăng
+accuracy lên 93,86\%, giảm error rate xuống 6,14\%. Điều chỉnh
+\texttt{min\_samples\_leaf=3} làm cây nhỏ hơn nhưng không cải thiện accuracy.
+
+Max Depth được chọn vì giữ malignant recall 92,86\% và có weighted F1 cao nhất
+trong hai mô hình đồng hạng accuracy. Pruning vẫn là lựa chọn tốt nếu mục tiêu
+ưu tiên cấu trúc nhỏ và dễ giải thích. Kết quả chứng minh regularization có thể
+giảm overfitting, nhưng việc chọn mô hình phải dựa trên nhiều metric và chi phí
+lỗi thay vì chỉ nhìn accuracy.
+
+\section{Hạn chế}
+
+\begin{itemize}
+  \item Dataset có 569 mẫu; chênh lệch một vài mẫu test có thể làm metric thay
+  đổi đáng kể.
+  \item Thí nghiệm dùng một train/test split cố định để tái lập. Nested
+  cross-validation hoặc repeated stratified cross-validation sẽ cho ước lượng
+  ổn định hơn về độ biến thiên.
+  \item Feature importance của một cây có thể thiên về feature có nhiều khả
+  năng chia; permutation importance hoặc SHAP có thể bổ sung góc nhìn.
+  \item Đây là thí nghiệm học thuật, không phải hệ thống hỗ trợ chẩn đoán lâm
+  sàng. Các threshold học được không nên diễn giải như quy tắc y khoa.
+\end{itemize}
+
+\section{Hướng phát triển}
+
+Có thể mở rộng bằng nested cross-validation, đánh giá ROC--AUC, tối ưu trực
+tiếp recall malignant, kiểm tra class weighting, feature selection và so sánh
+với Random Forest hoặc Gradient Boosting. Với mô hình cây đơn, việc xác nhận
+độ ổn định của rule qua nhiều split cũng là hướng phân tích quan trọng.

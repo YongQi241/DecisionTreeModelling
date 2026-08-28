@@ -1,0 +1,83 @@
+% !TeX program = pdflatex
+% !TeX encoding = UTF-8
+\documentclass[12pt]{report}
+
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=3cm,right=2cm]{geometry}
+\usepackage[T5]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{mathptmx}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{images/}{../results/figures/}}
+\setstretch{1.15}
+\setlength{\headheight}{15pt}
+\setlist[itemize]{itemsep=2pt,topsep=4pt}
+\setlist[enumerate]{itemsep=2pt,topsep=4pt}
+
+\titleformat{\chapter}[hang]
+  {\normalfont\bfseries\fontsize{16}{19}\selectfont}
+  {\chaptername~\thechapter.}{10pt}{}
+\titlespacing*{\chapter}{0pt}{10pt}{20pt}
+\titleformat{\section}
+  {\normalfont\bfseries\fontsize{14}{17}\selectfont}
+  {\thesection}{10pt}{}
+\titleformat{\subsection}
+  {\normalfont\bfseries\fontsize{13}{16}\selectfont}
+  {\thesubsection}{10pt}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Nhập môn Trí tuệ nhân tạo}
+\fancyhead[R]{\small Lab 2 -- Decision Tree}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\hypersetup{
+  pdftitle={Lab 2 - Decision Tree Modeling and Improvement},
+  pdfauthor={Nhóm 9 - Lớp 24C03}
+}
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\input{covers/outside_cover.tex}
+\input{covers/inside_cover.tex}
+\clearpage
+\hypersetup{pageanchor=true}
+
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{sections/a_group_introduction.tex}
+\input{sections/b_problem_context.tex}
+\input{sections/c_problem_modeling.tex}
+\input{sections/d_dataset.tex}
+\input{sections/e_algorithm_principles.tex}
+\input{sections/f_program_flow.tex}
+\input{sections/g_algorithm_comparison.tex}
+\input{sections/h_multilocation_optimization.tex}
+\input{sections/i_program_instructions.tex}
+\input{sections/j_limitations_future_work.tex}
+
+\end{document}

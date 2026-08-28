@@ -1,0 +1,63 @@
+% !TeX root = ../main.tex
+\chapter{Hướng dẫn chạy chương trình}
+\label{chap:instructions}
+
+\section{Yêu cầu môi trường}
+
+Notebook sử dụng Python 3 cùng các package trong Bảng~\ref{tab:environment}.
+Dataset được scikit-learn cung cấp sẵn nên không cần tải file thủ công.
+
+\begin{table}[H]
+\centering
+\caption{Môi trường thực thi notebook}
+\label{tab:environment}
+\begin{tabular}{ll}
+\toprule
+Thành phần & Vai trò \\
+\midrule
+Python 3.10 trở lên & Runtime \\
+NumPy & Tính toán số và danh sách alpha \\
+pandas & Bảng dữ liệu và xuất CSV \\
+Matplotlib & Trực quan hóa \\
+scikit-learn & Dataset, Decision Tree, GridSearchCV và metrics \\
+Jupyter / VS Code & Mở và chạy notebook \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Các bước tái lập}
+
+Tại thư mục chứa notebook, tạo môi trường và cài package:
+
+\begin{verbatim}
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+\end{verbatim}
+
+Mở \texttt{Decision\_Tree\_2.ipynb}, chọn kernel của môi trường vừa tạo, sau
+đó chạy \textbf{Restart Kernel and Run All Cells}. Notebook phải chạy theo thứ
+tự từ trên xuống vì các model cải thiện tái sử dụng cùng training/test split.
+
+\section{Đầu ra kỹ thuật}
+
+Sau khi chạy thành công, notebook tạo:
+
+\begin{itemize}
+  \item \texttt{results/model\_comparison.csv}: toàn bộ metric và complexity;
+  \item \texttt{results/hyperparameter\_summary.csv}: tham số được chọn và CV
+  accuracy;
+  \item \texttt{results/SUMMARY.md}: dataset, protocol, kết quả khóa và winner;
+  \item \texttt{results/figures/}: confusion matrix, full/readable baseline,
+  feature importance, tuning curves, bảng so sánh dạng hình và ba cây cải thiện.
+\end{itemize}
+
+Không sửa số liệu thủ công trong CSV hoặc hình. Khi seed, split hoặc parameter
+grid thay đổi, cần chạy lại toàn bộ notebook và cập nhật đồng thời report/video.
+
+\section{Kiểm tra trước khi bàn giao}
+
+Notebook đã được thực thi từ đầu đến cuối và lưu kèm output. Người nhận nên xác
+nhận các giá trị chính: baseline accuracy 0,9123; Max Depth và Pruning accuracy
+0,9386; selected model là Max Depth. File report dùng đường dẫn tương đối đến
+\texttt{../results/figures}, nên giữ nguyên cấu trúc thư mục khi build LaTeX.

@@ -1,0 +1,57 @@
+% !TeX root = ../main.tex
+\chapter{Mô tả dataset}
+\label{chap:dataset}
+
+\section{Nguồn dữ liệu}
+
+Nhóm sử dụng Breast Cancer Wisconsin (Diagnostic), do Wolberg, Mangasarian,
+Street và Street công bố trên UCI Machine Learning Repository
+\cite{uci-breast-cancer}. Notebook tải bản dữ liệu được đóng gói trong
+scikit-learn bằng \texttt{load\_breast\_cancer(as\_frame=True)}; vì vậy không
+có đường dẫn tuyệt đối hoặc file dữ liệu riêng phụ thuộc máy của thành viên.
+
+Các feature được tính từ ảnh số hóa của phép chọc hút kim nhỏ một khối u vú.
+Chúng mô tả đặc trưng của nhân tế bào như bán kính, texture, perimeter, area,
+smoothness, compactness, concavity, concave points, symmetry và fractal
+dimension. Mỗi nhóm đo có giá trị mean, standard error và worst, tổng cộng 30
+feature đầu vào.
+
+\begin{table}[H]
+\centering
+\caption{Tóm tắt Breast Cancer Wisconsin (Diagnostic)}
+\label{tab:dataset-summary}
+\begin{tabular}{p{5.0cm}p{8.5cm}}
+\toprule
+Thuộc tính & Giá trị \\
+\midrule
+Nguồn & UCI Machine Learning Repository / scikit-learn \\
+Số mẫu & 569 \\
+Số feature & 30 feature số thực \\
+Biến mục tiêu & Chẩn đoán khối u \\
+Nhãn lớp & malignant (0), benign (1) \\
+Phân bố lớp & 212 malignant (37,26\%); 357 benign (62,74\%) \\
+Giá trị thiếu & 0 \\
+Dòng feature trùng hoàn toàn & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Tiền xử lý}
+
+Notebook kiểm tra missing value và duplicate trước khi chia dữ liệu. Không cần
+imputation vì tập dữ liệu không có giá trị thiếu; không cần encoding vì toàn bộ
+feature là số. Nhóm giữ nguyên 30 feature để các threshold của cây vẫn gắn với
+đặc trưng gốc. Decision Tree không phụ thuộc vào khoảng cách Euclid nên không
+cần standardization.
+
+Dataset có chênh lệch lớp ở mức vừa phải. Nhóm dùng stratified split để duy trì
+tỷ lệ lớp giữa training và testing, đồng thời báo cáo recall riêng cho lớp
+malignant để accuracy tổng thể không che giấu số ca ác tính bị bỏ sót.
+
+\section{Lý do dataset phù hợp}
+
+Đây là bài toán phân loại nhị phân có nhãn rõ ràng và các feature số hỗ trợ
+phép chia theo ngưỡng. Quy mô 569 mẫu đủ để minh họa quá trình xây dựng cây và
+cross-validation nhưng vẫn cho phép trực quan hóa. Các rule như
+\texttt{worst radius $\leq$ 16.80} cũng có thể đọc và liên hệ với đặc trưng
+hình thái, phù hợp với yêu cầu phân tích cây của Lab 2.

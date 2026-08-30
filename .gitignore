@@ -1,0 +1,35 @@
+# LaTeX build artifacts under report/
+/report/**/*.acn
+/report/**/*.acr
+/report/**/*.alg
+/report/**/*.aux
+/report/**/*.bbl
+/report/**/*.bcf
+/report/**/*.blg
+/report/**/*.dvi
+/report/**/*.fdb_latexmk
+/report/**/*.fls
+/report/**/*.fmt
+/report/**/*.fot
+/report/**/*.glg
+/report/**/*.glo
+/report/**/*.gls
+/report/**/*.glsdefs
+/report/**/*.ist
+/report/**/*.lof
+/report/**/*.log
+/report/**/*.lot
+/report/**/*.nav
+/report/**/*.out
+/report/**/*.pyg
+/report/**/*.run.xml
+/report/**/*.snm
+/report/**/*.synctex
+/report/**/*.synctex.gz
+/report/**/*.toc
+/report/**/*.vrb
+/report/**/*.xdv
+/report/**/_minted-*/
+
+# Compiled report
+/report/main.pdf

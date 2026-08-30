@@ -8,6 +8,8 @@ Cây quyết định là mô hình học có giám sát biểu diễn quá trìn
 chuỗi điều kiện dạng ``nếu--thì''. Tại mỗi node, thuật toán chọn một feature và
 một ngưỡng chia dữ liệu thành các nhóm có độ hỗn tạp nhỏ hơn. Với bài toán phân
 loại, node lá trả về lớp chiếm ưu thế trong các mẫu huấn luyện đi đến lá đó.
+Mô hình cây phân loại và cơ chế chọn phép chia được trình bày trong CART và tài
+liệu scikit-learn~\cite{breiman-cart,sklearn-tree}.
 
 Trong thí nghiệm này, mô hình sử dụng chỉ số Gini mặc định. Với tập mẫu tại
 node $t$, Gini impurity được xác định bởi

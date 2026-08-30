@@ -11,16 +11,17 @@ Dataset được scikit-learn cung cấp sẵn nên không cần tải file th�
 \centering
 \caption{Môi trường thực thi notebook}
 \label{tab:environment}
-\begin{tabular}{ll}
+\begin{tabular}{lll}
 \toprule
-Thành phần & Vai trò \\
+Thành phần & Phiên bản đã kiểm tra & Vai trò \\
 \midrule
-Python 3.10 trở lên & Runtime \\
-NumPy & Tính toán số và danh sách alpha \\
-pandas & Bảng dữ liệu và xuất CSV \\
-Matplotlib & Trực quan hóa \\
-scikit-learn & Dataset, Decision Tree, GridSearchCV và metrics \\
-Jupyter / VS Code & Mở và chạy notebook \\
+Python & 3.13.1 & Runtime \\
+NumPy & 2.3.4 & Tính toán số và danh sách alpha \\
+pandas & 2.3.3 & Bảng dữ liệu và xuất CSV \\
+Matplotlib & 3.11.1 & Trực quan hóa \\
+scikit-learn & 1.7.2 & Dataset, Decision Tree, GridSearchCV và metrics \\
+JupyterLab & 4.6.3 & Mở và chạy notebook \\
+nbconvert & 7.17.1 & Kiểm tra thực thi không cần giao diện \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -35,9 +36,21 @@ python -m venv .venv
 python -m pip install -r requirements.txt
 \end{verbatim}
 
-Mở \texttt{Decision\_Tree\_2.ipynb}, chọn kernel của môi trường vừa tạo, sau
-đó chạy \textbf{Restart Kernel and Run All Cells}. Notebook phải chạy theo thứ
-tự từ trên xuống vì các model cải thiện tái sử dụng cùng training/test split.
+Mở notebook bằng lệnh dưới đây để không phụ thuộc việc executable
+\texttt{jupyter} đã được thêm vào \texttt{PATH} hay chưa:
+
+\begin{verbatim}
+python -m jupyterlab Decision_Tree_2.ipynb
+\end{verbatim}
+
+Chọn kernel của môi trường vừa tạo, sau đó chạy \textbf{Restart Kernel and Run
+All Cells}. Notebook phải chạy theo thứ tự từ trên xuống vì các model cải thiện
+tái sử dụng cùng training/test split. Có thể kiểm tra toàn bộ notebook không cần
+giao diện bằng lệnh:
+
+\begin{verbatim}
+python -m nbconvert --to notebook --execute Decision_Tree_2.ipynb
+\end{verbatim}
 
 \section{Đầu ra kỹ thuật}
 
@@ -57,7 +70,8 @@ grid thay đổi, cần chạy lại toàn bộ notebook và cập nhật đồn
 
 \section{Kiểm tra trước khi bàn giao}
 
-Notebook đã được thực thi từ đầu đến cuối và lưu kèm output. Người nhận nên xác
-nhận các giá trị chính: baseline accuracy 0,9123; Max Depth và Pruning accuracy
-0,9386; selected model là Max Depth. File report dùng đường dẫn tương đối đến
+Notebook đã được thực thi lại từ đầu đến cuối bằng Python 3.13.1, không có cell
+lỗi, tạo đủ ba file kết quả và chín hình. Người nhận nên xác nhận các giá trị
+chính: baseline accuracy 0,9123; Max Depth và Pruning accuracy 0,9386; selected
+model là Max Depth. File report dùng đường dẫn tương đối đến
 \texttt{../results/figures}, nên giữ nguyên cấu trúc thư mục khi build LaTeX.

@@ -7,8 +7,10 @@
 Dataset được chia một lần theo tỷ lệ 80/20 với
 \texttt{random\_state=42} và \texttt{stratify=y}. Tập training gồm 455 mẫu
 (170 malignant, 285 benign); tập test gồm 114 mẫu (42 malignant, 72 benign).
-Baseline là \texttt{DecisionTreeClassifier} với cấu hình mặc định và seed cố
-định, không chứa tuning ngầm.
+Baseline là \texttt{DecisionTreeClassifier} với seed
+\texttt{random\_state=42}. Các tham số cấu trúc giữ giá trị mặc định:
+\texttt{criterion=gini}, \texttt{splitter=best} và
+\texttt{max\_depth=None}. Mô hình không chứa tuning ngầm.
 
 Tất cả mô hình cải thiện dùng chính split này. Việc chọn hyperparameter thực
 hiện bằng 5-fold cross-validation trên 455 mẫu training. Đây là biện pháp tránh
@@ -41,6 +43,8 @@ Accuracy test bằng 91,23\%, tương ứng error rate 8,77\%. Baseline phân lo
 đúng 104/114 mẫu. Confusion matrix ở Hình~\ref{fig:baseline-cm} cho thấy mô
 hình nhận đúng 39/42 ca malignant và 65/72 ca benign; có 3 ca malignant bị dự
 đoán thành benign và 7 ca benign bị dự đoán thành malignant.
+Các metric malignant trong báo cáo được tính riêng cho nhãn 0 theo quy ước của
+dataset; vì vậy malignant recall đo trực tiếp tỷ lệ ca ác tính được phát hiện.
 
 \begin{figure}[H]
 \centering
@@ -58,6 +62,6 @@ file \texttt{baseline\_tree\_full.png} được giữ trong gói kết quả k�
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{baseline_tree_readable.png}
-\caption{Cấu trúc dễ đọc của baseline (giới hạn phần hiển thị ở ba mức sâu)}
+\caption{Cấu trúc dễ đọc của baseline (bốn tầng đầu, từ mức 0 đến mức 3)}
 \label{fig:baseline-readable}
 \end{figure}

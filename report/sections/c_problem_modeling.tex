@@ -8,13 +8,16 @@ Nhóm sử dụng Breast Cancer Wisconsin (Diagnostic), do Wolberg, Mangasarian,
 Street và Street công bố trên UCI Machine Learning Repository
 \cite{uci-breast-cancer}. Notebook tải bản dữ liệu được đóng gói trong
 scikit-learn bằng \texttt{load\_breast\_cancer(as\_frame=True)}; vì vậy không
-có đường dẫn tuyệt đối hoặc file dữ liệu riêng phụ thuộc máy của thành viên.
+có đường dẫn tuyệt đối hoặc file dữ liệu riêng phụ thuộc máy của thành
+viên~\cite{sklearn-dataset}.
 
 Các feature được tính từ ảnh số hóa của phép chọc hút kim nhỏ một khối u vú.
 Chúng mô tả đặc trưng của nhân tế bào như bán kính, texture, perimeter, area,
 smoothness, compactness, concavity, concave points, symmetry và fractal
 dimension. Mỗi nhóm đo có giá trị mean, standard error và worst, tổng cộng 30
-feature đầu vào.
+feature đầu vào. Theo mô tả dataset, giá trị ``worst'' là trung bình của ba giá
+trị lớn nhất của feature tương ứng trên mỗi ảnh, không phải một phép đo cực đại
+đơn lẻ.
 
 \begin{table}[H]
 \centering
@@ -51,7 +54,9 @@ malignant để accuracy tổng thể không che giấu số ca ác tính bị b
 \section{Lý do dataset phù hợp}
 
 Đây là bài toán phân loại nhị phân có nhãn rõ ràng và các feature số hỗ trợ
-phép chia theo ngưỡng. Quy mô 569 mẫu đủ để minh họa quá trình xây dựng cây và
-cross-validation nhưng vẫn cho phép trực quan hóa. Các rule như
+phép chia theo ngưỡng. Quy mô 569 mẫu phù hợp với phạm vi thí nghiệm học thuật:
+đủ để minh họa quá trình xây dựng cây và cross-validation nhưng vẫn cho phép
+trực quan hóa. Tuy nhiên, kết quả trên một train/test split không được xem là
+bằng chứng cho hiệu quả lâm sàng. Các rule như
 \texttt{worst radius $\leq$ 16.80} cũng có thể đọc và liên hệ với đặc trưng
 hình thái, phù hợp với yêu cầu phân tích cây của Lab 2.

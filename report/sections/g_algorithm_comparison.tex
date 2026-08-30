@@ -10,20 +10,20 @@ Dưới đây là bảng tổng hợp kết quả của các mô hình (cơ sở
 \caption{So sánh Baseline và các phương pháp cải thiện}
 \label{tab:model-comparison}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{llcccc}
+\begin{tabular}{llcccccc}
 \toprule
-\textbf{Model} & \textbf{Key Parameter} & \textbf{Train Accuracy} & \textbf{Test Accuracy} & \textbf{Tree Depth} & \textbf{Leaves} \\
+\textbf{Model} & \textbf{Key Parameter} & \textbf{Train Acc} & \textbf{Test Acc} & \textbf{Error Rate} & \textbf{Malignant Recall} & \textbf{Depth} & \textbf{Leaf} \\
 \midrule
-Baseline         & default            & 100.0\%        & 91.23\%       & 7          & 19     \\
-Max Depth        & max\_depth=4       & 98.68\%        & 93.86\%       & 4          & 11     \\
-Min Samples Leaf & min\_samples\_leaf=3 & 98.02\%        & 91.23\%       & 6          & 13     \\
-Pruning          & ccp\_alpha=0.005934 & 97.36\%        & 93.86\%       & 3          & 6      \\
+Baseline         & default            & 100.0\%        & 91.23\%       & 8.77\%      & 85.71\%           & 7          & 19     \\
+Max Depth        & max\_depth=4       & 98.68\%        & 93.86\%       & 6.14\%      & 92.86\%           & 4          & 11     \\
+Min Samples Leaf & min\_samples\_leaf=3 & 98.02\%        & 91.23\%       & 8.77\%      & 88.10\%           & 6          & 13     \\
+Pruning          & ccp\_alpha=0.005934 & 97.36\%        & 93.86\%       & 6.14\%      & 90.48\%           & 3          & 6      \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
 \section{Xác định Winner (Mô hình tốt nhất)}
-Mô hình tốt nhất là \textbf{Max Depth (\texttt{max\_depth=4})}. Dù Max Depth và Pruning chia sẻ chung vị trí dẫn đầu về Test Accuracy (93.86\%), Max Depth được chọn do có chỉ số \textbf{Malignant Recall (độ nhạy với khối u ác tính)} là 92.86\%, cao hơn mức 90.48\% của Pruning. Trong lĩnh vực y khoa, việc bỏ sót chẩn đoán một bệnh nhân ung thư nguy hiểm hơn rất nhiều so với chẩn đoán nhầm (đối với lành tính), vì vậy ưu tiên Recall cho lớp Malignant là hợp lý.
+Mô hình tốt nhất là \textbf{Max Depth (\texttt{max\_depth=4})}. Dù Max Depth và Pruning chia sẻ chung vị trí dẫn đầu về Test Accuracy (93.86\%) - tương đương với việc cả hai mô hình cùng dự đoán sai 7 mẫu, Max Depth vẫn được chọn. Cụ thể, Max Depth bỏ sót 3 ca malignant và cảnh báo nhầm 4 ca (đạt \textbf{Malignant recall} 92.86\%), trong khi Pruning bỏ sót 4 ca malignant và cảnh báo nhầm 3 ca (\textbf{Malignant recall} 90.48\%). Trong lĩnh vực y khoa, việc bỏ sót chẩn đoán một bệnh nhân ung thư nguy hiểm hơn rất nhiều so với chẩn đoán nhầm (đối với lành tính), vì vậy Max Depth được ưu tiên vì giúp giảm số ca ung thư bị bỏ sót.
 
 \section{Đánh giá Trade-off}
-Baseline đánh đổi khả năng dự đoán thực tế để đạt 100\% trên dữ liệu đã biết (độ phức tạp cao). Trong khi đó, Max Depth và Pruning chấp nhận hy sinh vài phần trăm độ chính xác của tập huấn luyện (Train Acc tụt xuống dưới 100\%) để làm giảm mức độ phức tạp. Sự đánh đổi này mang lại lợi ích khổng lồ, khi mô hình thực sự đã cải thiện được khả năng ``hiểu'' dữ liệu thay vì ``học thuộc lòng''.
+Baseline đánh đổi khả năng dự đoán thực tế để đạt 100\% trên dữ liệu đã biết (độ phức tạp cao). Trong khi đó, Max Depth và Pruning chấp nhận đánh đổi theo lý thuyết \textbf{Bias-Variance Trade-off}: mô hình chấp nhận tăng nhẹ Bias trên tập huấn luyện (Train Accuracy giảm từ 100\% xuống $\sim$98\%) để giảm mạnh Variance, loại bỏ sự nhạy cảm với nhiễu và tăng cường tính ổn định (Generalization) trên dữ liệu thực tế.

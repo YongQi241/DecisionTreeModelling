@@ -4,21 +4,42 @@
 
 \section{Phương pháp 1: Giới hạn độ sâu tối đa (Max Depth)}
 \begin{itemize}
-    \item \textbf{WHAT:} Thiết lập tham số \texttt{max\_depth = 4} để giới hạn cây không được vượt quá độ sâu 4 tầng (thay vì 7 tầng ở baseline).
-    \item \textbf{RESULT:} Test Accuracy tăng từ 91.23\% lên 93.86\%, cấu trúc cây tinh gọn hơn rõ rệt với số lá giảm từ 19 xuống 11.
-    \item \textbf{WHY:} Việc giới hạn độ sâu ép cây dừng phân nhánh sớm, ngăn chặn việc tạo ra các node lá mang quá ít mẫu dữ liệu. Điều này giúp loại bỏ sự phụ thuộc vào nhiễu nhỏ nhặt, cải thiện đáng kể khả năng tổng quát hóa (generalization) của mô hình.
+    \item \textbf{WHAT:} Thiết lập tham số \texttt{max\_depth = 4} để giới hạn cây không được vượt quá độ sâu 4 tầng (thay vì 7 tầng ở baseline). Siêu tham số này được xác định tối ưu thông qua kỹ thuật 5-Fold Cross-Validation trên tập Training nhằm ngăn ngừa rò rỉ dữ liệu (data leakage) từ tập Test.
+    \item \textbf{RESULT:} Test Accuracy tăng từ 91.23\% lên 93.86\%, cấu trúc cây tinh gọn hơn rõ rệt với số leaf giảm từ 19 xuống 11.
+    \item \textbf{WHY:} Việc giới hạn độ sâu ép cây dừng split sớm, ngăn chặn việc tạo ra các node leaf mang quá ít mẫu dữ liệu. Điều này giúp loại bỏ sự phụ thuộc vào nhiễu nhỏ nhặt, cải thiện đáng kể khả năng tổng quát hóa (generalization) của mô hình.
 \end{itemize}
+Hình~\ref{fig:tree_max_depth} minh họa cấu trúc của cây sau khi áp dụng giới hạn độ sâu. Qua hình, có thể thấy cây đã cắt đứt các nhánh rườm rà từ tầng thứ 5 trở đi, giữ lại cấu trúc 4 tầng với các đặc trưng mang tính tổng quát cao.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{tree_max_depth.png}
+    \caption{Cấu trúc cây quyết định sau khi áp dụng max\_depth=4}
+    \label{fig:tree_max_depth}
+\end{figure}
 
 \section{Phương pháp 2: Số lượng mẫu tối thiểu ở node lá (Min Samples Leaf)}
 \begin{itemize}
-    \item \textbf{WHAT:} Sử dụng tham số \texttt{min\_samples\_leaf = 3}, yêu cầu mỗi lá phải chứa ít nhất 3 mẫu, thay vì mặc định.
-    \item \textbf{RESULT:} Test Accuracy duy trì mức 91.23\%, Train Accuracy giảm còn 98.02\%. Cấu trúc cây có sự thu gọn nhất định, giảm xuống còn 6 tầng và 13 lá.
-    \item \textbf{WHY:} Buộc mỗi node lá đại diện cho nhiều hơn 1 mẫu giúp làm mượt cây quyết định. Mặc dù nó giúp cây bớt phức tạp hơn một chút, hiệu suất mang lại trên tập test vẫn chưa cải thiện đáng kể so với baseline trong trường hợp này.
+    \item \textbf{WHAT:} Sử dụng tham số \texttt{min\_samples\_leaf = 3}, yêu cầu mỗi leaf phải chứa ít nhất 3 mẫu, thay vì mặc định. Siêu tham số này được xác định tối ưu thông qua kỹ thuật 5-Fold Cross-Validation trên tập Training nhằm ngăn ngừa rò rỉ dữ liệu (data leakage) từ tập Test.
+    \item \textbf{RESULT:} Test Accuracy duy trì mức 91.23\%, Train Accuracy giảm còn 98.02\%. Cấu trúc cây có sự thu gọn nhất định, giảm xuống còn 6 tầng và 13 leaf.
+    \item \textbf{WHY:} Buộc mỗi node leaf đại diện cho nhiều hơn 1 mẫu giúp làm mượt cây quyết định. Mặc dù nó giúp cây bớt phức tạp hơn một chút, hiệu suất mang lại trên tập test vẫn chưa cải thiện đáng kể so với baseline trong trường hợp này.
 \end{itemize}
+Cấu trúc cây sau khi áp dụng giới hạn số mẫu tối thiểu ở node leaf được trình bày tại Hình~\ref{fig:tree_min_samples_leaf}. Việc áp dụng tham số này giúp ngăn chặn tạo ra các node leaf đơn lẻ (1–2 mẫu), buộc mỗi vùng quyết định phải có tính đại diện cao hơn (tối thiểu 3 mẫu).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{tree_min_samples_leaf.png}
+    \caption{Cấu trúc cây quyết định sau khi áp dụng min\_samples\_leaf=3}
+    \label{fig:tree_min_samples_leaf}
+\end{figure}
 
 \section{Phương pháp 3: Cắt tỉa (Pruning - Cost Complexity Pruning)}
 \begin{itemize}
-    \item \textbf{WHAT:} Áp dụng cắt tỉa với ngưỡng \texttt{ccp\_alpha = 0.005934} để loại bỏ đi các nhánh có ít khả năng mang lại thông tin hữu ích nhưng lại làm tăng độ phức tạp.
-    \item \textbf{RESULT:} Test Accuracy nhảy vọt lên mức 93.86\%. Cấu trúc cây trở nên vô cùng tối giản với độ sâu chỉ vỏn vẹn 3 tầng và 6 lá.
-    \item \textbf{WHY:} Phương pháp pruning loại bỏ trực tiếp các phần phân nhánh không mang lại giá trị gia tăng đáng kể đối với tập validation. Nhờ đó, nó mang lại một cấu trúc cây đơn giản nhất có thể mà vẫn duy trì độ chính xác cao nhất (ngăn ngừa overfitting triệt để).
+    \item \textbf{WHAT:} Áp dụng cắt tỉa (pruning) với ngưỡng \texttt{ccp\_alpha = 0.005934} để loại bỏ đi các nhánh có ít khả năng mang lại thông tin hữu ích nhưng lại làm tăng độ phức tạp. Siêu tham số này được xác định tối ưu thông qua kỹ thuật 5-Fold Cross-Validation trên tập Training nhằm ngăn ngừa rò rỉ dữ liệu (data leakage) từ tập Test.
+    \item \textbf{RESULT:} Test Accuracy nhảy vọt lên mức 93.86\%. Cấu trúc cây trở nên vô cùng tối giản với độ sâu chỉ vỏn vẹn 3 tầng và 6 leaf.
+    \item \textbf{WHY:} Phương pháp pruning loại bỏ trực tiếp các split không mang lại giá trị gia tăng đáng kể đối với tập validation. Nhờ đó, nó mang lại một cấu trúc cây đơn giản nhất có thể mà vẫn duy trì độ chính xác cao nhất (ngăn ngừa overfitting triệt để).
 \end{itemize}
+Kết quả của phương pháp pruning thể hiện qua Hình~\ref{fig:tree_pruned}. Phương pháp này đã cắt tỉa triệt để các nhánh có độ suy giảm entropy/gini không bù đắp được chi phí phức tạp, chỉ giữ lại một cây siêu tinh gọn 3 tầng với 6 leaf.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{tree_pruned.png}
+    \caption{Cấu trúc cây quyết định sau khi cắt tỉa (pruning)}
+    \label{fig:tree_pruned}
+\end{figure}

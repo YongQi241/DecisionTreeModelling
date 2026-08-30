@@ -3,10 +3,12 @@
 \label{chap:conclusion}
 
 \section{Key findings}
-Thuật toán Decision Tree mặc định nếu không thiết lập cẩn thận rất dễ bị overfitting, biểu hiện qua độ phân nhánh phức tạp. Bằng cách can thiệp bằng các kỹ thuật như giới hạn độ sâu hoặc tỉa nhánh, hiệu năng dự đoán trên dữ liệu chưa biết được nâng cao đáng kể.
+Thuật toán Decision Tree mặc định nếu không thiết lập cẩn thận rất dễ bị overfitting, biểu hiện qua cấu trúc split phức tạp. Bằng cách can thiệp bằng các kỹ thuật như giới hạn độ sâu hoặc cắt tỉa (pruning), kết quả cho thấy trên train/test split hiện tại, hiệu năng dự đoán trên dữ liệu chưa biết được nâng cao đáng kể.
 
 \section{Đánh giá hiệu quả}
-Trên bộ dữ liệu Breast Cancer, Decision Tree thể hiện khả năng mạnh mẽ khi không chỉ mang lại kết quả chẩn đoán chính xác (Test Accuracy $\approx$ 94\%), mà quan trọng hơn là tính tường minh, có thể vẽ được cây rẽ nhánh chi tiết giúp cho đội ngũ y khoa có thể đưa ra giải thích lý luận hợp lý trong chẩn đoán.
+Trên bộ dữ liệu Breast Cancer, Decision Tree thể hiện khả năng mạnh mẽ khi không chỉ mang lại kết quả chẩn đoán chính xác (Test Accuracy $\approx$ 94\%), mà quan trọng hơn là tính tường minh (Explainability/White-box). Mô hình cho phép vẽ được cây rẽ nhánh chi tiết, giúp đội ngũ y bác sĩ hiểu rõ quy tắc ra quyết định và đưa ra giải thích lý luận hợp lý trong chẩn đoán, một ưu thế vượt trội so với các mô hình "hộp đen" (Black-box) như Neural Network hay SVM.
 
-\section{Bài học rút ra}
-Training accuracy 100\% không đồng nghĩa với một mô hình tốt, mà thực chất thường chỉ ra điểm yếu trong việc thiết lập. Các mô hình đơn giản, ít nút, ít nhánh thường khái quát hóa dữ liệu tốt hơn là các mô hình rườm rà. Lựa chọn mô hình không chỉ dựa vào Accuracy mà còn phụ thuộc vào ngữ cảnh thực tế của bài toán (chú trọng Recall đối với bệnh nhân ung thư).
+\section{Bài học rút ra \& Hướng phát triển}
+Training accuracy 100\% không đồng nghĩa với một mô hình tốt, mà thực chất thường chỉ ra điểm yếu trong việc thiết lập. Các mô hình đơn giản, ít node, ít split thường khái quát hóa dữ liệu tốt hơn là các mô hình rườm rà. Lựa chọn mô hình không chỉ dựa vào Accuracy mà còn phụ thuộc vào ngữ cảnh thực tế của bài toán (chú trọng recall đối với bệnh nhân ung thư).
+
+Tuy nhiên, kết quả này được ghi nhận trên train/test split hiện tại và có những hạn chế nhất định. Tập dữ liệu còn tương đối nhỏ (569 mẫu) nên dễ dẫn đến sai số chọn mẫu (sampling variance). Trong tương lai, nhóm đề xuất thử nghiệm các mô hình Ensemble (như Random Forest, Gradient Boosting) để khắc phục nhược điểm của một cây đơn lẻ, và sử dụng Cross-Validation toàn diện để đánh giá độ tin cậy một cách bền vững hơn.

@@ -40,8 +40,10 @@ tiên malignant recall, sau đó weighted F1 và độ đơn giản. Với bài 
 
 Max Depth được chọn làm mô hình chính vì malignant recall 92,86\%, cao hơn
 90,48\% của Pruning, đồng thời weighted F1 nhỉnh hơn (93,87\% so với 93,84\%).
-Nói cách khác, Max Depth phát hiện thêm một ca malignant trên test set trong
-khi tổng số dự đoán sai vẫn bằng Pruning.
+Hai mô hình đều dự đoán sai 7 mẫu, nhưng Max Depth bỏ sót 3 ca malignant và
+cảnh báo nhầm 4 ca, trong khi Pruning bỏ sót 4 ca malignant và cảnh báo nhầm
+3 ca. Vì vậy, Max Depth phát hiện thêm một ca malignant mà không làm tăng tổng
+số lỗi.
 
 \section{Trade-off và ý nghĩa}
 
@@ -50,7 +52,9 @@ hình được ưu tiên: chỉ 6 leaf và depth 3, so với 11 leaf và depth 4
 Depth. Pruning cũng có malignant precision cao hơn, nghĩa là tỷ lệ dự đoán
 malignant đúng cao hơn trong số các ca bị gắn nhãn malignant. Vì vậy, kết luận
 không phải một phương pháp luôn tốt hơn; lựa chọn phụ thuộc chi phí của từng
-loại lỗi và yêu cầu về độ đơn giản.
+loại lỗi và yêu cầu về độ đơn giản. Đây cũng là biểu hiện của bias--variance
+trade-off: chấp nhận tăng nhẹ bias trên training set để giảm variance và cải
+thiện khả năng tổng quát hóa trên dữ liệu chưa quan sát.
 
 Min Samples Leaf cho thấy một ``improvement method'' không nhất thiết phải tăng
 accuracy. Giá trị học thuật nằm ở quy trình thử nghiệm, đo lường và giải thích:

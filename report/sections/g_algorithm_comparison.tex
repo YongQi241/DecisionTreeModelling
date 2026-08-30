@@ -1,57 +1,29 @@
 % !TeX root = ../main.tex
-\chapter{So sánh và thảo luận kết quả}
+\chapter{So sánh kết quả (Comparison of Results)}
 \label{chap:comparison}
 
-\section{Bảng so sánh}
-
-Tất cả số liệu trong Bảng~\ref{tab:model-comparison} được sinh tự động từ các
-model output và lưu tại \path{results/model_comparison.csv}.
+\section{Bảng tổng hợp}
+Dưới đây là bảng tổng hợp kết quả của các mô hình (cơ sở so sánh từ bảng \texttt{results/model\_comparison.csv}):
 
 \begin{table}[H]
 \centering
-\caption{So sánh baseline và ba mô hình cải thiện}
+\caption{So sánh Baseline và các phương pháp cải thiện}
 \label{tab:model-comparison}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccccc}
+\begin{tabular}{llcccc}
 \toprule
-Model & Train Acc. & Test Acc. & Error & Weighted F1 & Mal. Prec. & Mal. Recall & Depth & Leaves \\
+\textbf{Model} & \textbf{Key Parameter} & \textbf{Train Accuracy} & \textbf{Test Accuracy} & \textbf{Tree Depth} & \textbf{Leaves} \\
 \midrule
-Baseline & 1,0000 & 0,9123 & 0,0877 & 0,9130 & 0,8478 & 0,9286 & 7 & 19 \\
-Max Depth & 0,9868 & \textbf{0,9386} & \textbf{0,0614} & \textbf{0,9387} & 0,9070 & \textbf{0,9286} & 4 & 11 \\
-Min Samples Leaf & 0,9802 & 0,9123 & 0,0877 & 0,9127 & 0,8636 & 0,9048 & 6 & 13 \\
-Pruning & 0,9736 & \textbf{0,9386} & \textbf{0,0614} & 0,9384 & \textbf{0,9268} & 0,9048 & \textbf{3} & \textbf{6} \\
+Baseline         & default            & 100.0\%        & 91.23\%       & 7          & 19     \\
+Max Depth        & max\_depth=4       & 98.68\%        & 93.86\%       & 4          & 11     \\
+Min Samples Leaf & min\_samples\_leaf=3 & 98.02\%        & 91.23\%       & 6          & 13     \\
+Pruning          & ccp\_alpha=0.005934 & 97.36\%        & 93.86\%       & 3          & 6      \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{model_comparison.png}
-\caption{Trade-off giữa accuracy và số leaf của các mô hình}
-\label{fig:model-comparison}
-\end{figure}
+\section{Xác định Winner (Mô hình tốt nhất)}
+Mô hình tốt nhất là \textbf{Max Depth (\texttt{max\_depth=4})}. Dù Max Depth và Pruning chia sẻ chung vị trí dẫn đầu về Test Accuracy (93.86\%), Max Depth được chọn do có chỉ số \textbf{Malignant Recall (độ nhạy với khối u ác tính)} là 92.86\%, cao hơn mức 90.48\% của Pruning. Trong lĩnh vực y khoa, việc bỏ sót chẩn đoán một bệnh nhân ung thư nguy hiểm hơn rất nhiều so với chẩn đoán nhầm (đối với lành tính), vì vậy ưu tiên Recall cho lớp Malignant là hợp lý.
 
-\section{Mô hình tốt nhất}
-
-Max Depth và Pruning cùng đạt test accuracy 93,86\% và error rate 6,14\%.
-Notebook không dùng thứ tự dòng để xử lý tie mà áp dụng quy tắc minh bạch: ưu
-tiên malignant recall, sau đó weighted F1 và độ đơn giản. Với bài toán chẩn
-đoán, bỏ sót malignant là loại lỗi đáng chú ý hơn.
-
-Max Depth được chọn làm mô hình chính vì malignant recall 92,86\%, cao hơn
-90,48\% của Pruning, đồng thời weighted F1 nhỉnh hơn (93,87\% so với 93,84\%).
-Nói cách khác, Max Depth phát hiện thêm một ca malignant trên test set trong
-khi tổng số dự đoán sai vẫn bằng Pruning.
-
-\section{Trade-off và ý nghĩa}
-
-Pruning là phương án cạnh tranh mạnh khi khả năng diễn giải hoặc kích thước mô
-hình được ưu tiên: chỉ 6 leaf và depth 3, so với 11 leaf và depth 4 của Max
-Depth. Pruning cũng có malignant precision cao hơn, nghĩa là tỷ lệ dự đoán
-malignant đúng cao hơn trong số các ca bị gắn nhãn malignant. Vì vậy, kết luận
-không phải một phương pháp luôn tốt hơn; lựa chọn phụ thuộc chi phí của từng
-loại lỗi và yêu cầu về độ đơn giản.
-
-Min Samples Leaf cho thấy một ``improvement method'' không nhất thiết phải tăng
-accuracy. Giá trị học thuật nằm ở quy trình thử nghiệm, đo lường và giải thích:
-phương pháp này giảm cây nhưng không giảm error trên test split hiện tại.
+\section{Đánh giá Trade-off}
+Baseline đánh đổi khả năng dự đoán thực tế để đạt 100\% trên dữ liệu đã biết (độ phức tạp cao). Trong khi đó, Max Depth và Pruning chấp nhận hy sinh vài phần trăm độ chính xác của tập huấn luyện (Train Acc tụt xuống dưới 100\%) để làm giảm mức độ phức tạp. Sự đánh đổi này mang lại lợi ích khổng lồ, khi mô hình thực sự đã cải thiện được khả năng ``hiểu'' dữ liệu thay vì ``học thuộc lòng''.

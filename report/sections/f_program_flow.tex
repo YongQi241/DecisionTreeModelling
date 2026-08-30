@@ -1,97 +1,24 @@
 % !TeX root = ../main.tex
-\chapter{Các phương pháp cải thiện}
+\chapter{Các phương pháp cải thiện (Improvement Methods)}
 \label{chap:improvements}
 
-\section{Thiết kế tuning chung}
+\section{Phương pháp 1: Giới hạn độ sâu tối đa (Max Depth)}
+\begin{itemize}
+    \item \textbf{WHAT:} Thiết lập tham số \texttt{max\_depth = 4} để giới hạn cây không được vượt quá độ sâu 4 tầng (thay vì 7 tầng ở baseline).
+    \item \textbf{RESULT:} Test Accuracy tăng từ 91.23\% lên 93.86\%, cấu trúc cây tinh gọn hơn rõ rệt với số lá giảm từ 19 xuống 11.
+    \item \textbf{WHY:} Việc giới hạn độ sâu ép cây dừng phân nhánh sớm, ngăn chặn việc tạo ra các node lá mang quá ít mẫu dữ liệu. Điều này giúp loại bỏ sự phụ thuộc vào nhiễu nhỏ nhặt, cải thiện đáng kể khả năng tổng quát hóa (generalization) của mô hình.
+\end{itemize}
 
-Mỗi phương pháp thay đổi một cơ chế regularization so với baseline và được
-tuning riêng bằng \texttt{GridSearchCV}, 5 folds, scoring là accuracy. CV chỉ
-nhìn training data. Hình~\ref{fig:tuning} cho thấy mean CV accuracy và độ lệch
-chuẩn tại từng ứng viên.
+\section{Phương pháp 2: Số lượng mẫu tối thiểu ở node lá (Min Samples Leaf)}
+\begin{itemize}
+    \item \textbf{WHAT:} Sử dụng tham số \texttt{min\_samples\_leaf = 3}, yêu cầu mỗi lá phải chứa ít nhất 3 mẫu, thay vì mặc định.
+    \item \textbf{RESULT:} Test Accuracy duy trì mức 91.23\%, Train Accuracy giảm còn 98.02\%. Cấu trúc cây có sự thu gọn nhất định, giảm xuống còn 6 tầng và 13 lá.
+    \item \textbf{WHY:} Buộc mỗi node lá đại diện cho nhiều hơn 1 mẫu giúp làm mượt cây quyết định. Mặc dù nó giúp cây bớt phức tạp hơn một chút, hiệu suất mang lại trên tập test vẫn chưa cải thiện đáng kể so với baseline trong trường hợp này.
+\end{itemize}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{hyperparameter_tuning.png}
-\caption{Kết quả 5-fold cross-validation cho ba phương pháp}
-\label{fig:tuning}
-\end{figure}
-
-\begin{table}[H]
-\centering
-\caption{Hyperparameter được chọn trên tập training}
-\label{tab:selected-parameters}
-\begin{tabular}{lll}
-\toprule
-Phương pháp & Giá trị được chọn & Best CV accuracy \\
-\midrule
-Giới hạn độ sâu & \texttt{max\_depth=4} & 0,9385 \\
-Mẫu tối thiểu tại leaf & \texttt{min\_samples\_leaf=3} & 0,9363 \\
-Cost-complexity pruning & \texttt{ccp\_alpha=0.005934} & 0,9341 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\section{Improvement 1: giới hạn \texttt{max\_depth}}
-
-\textbf{What.} Notebook thử các độ sâu 2, 3, 4, 5, 6, 7, 8 và 10. Giới hạn
-độ sâu ngăn cây tiếp tục chia những nhánh quá đặc thù; nếu giá trị quá nhỏ thì
-cây có thể underfit.
-
-\textbf{Result.} CV chọn \texttt{max\_depth=4}. Trên test set, accuracy tăng
-từ 91,23\% lên 93,86\% và error rate giảm từ 8,77\% xuống 6,14\%. Cây còn 11
-leaf, training accuracy 98,68\%, weighted F1 93,87\% và malignant recall
-92,86\%.
-
-\textbf{Why.} Việc loại bỏ ba tầng sâu làm giảm các split phụ thuộc training
-nhưng vẫn giữ các quyết định quan trọng ở gần root. Khoảng cách train--test giảm
-từ 8,77 xuống 4,82 điểm phần trăm, cho thấy generalization tốt hơn.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{tree_max_depth.png}
-\caption{Decision Tree sau khi chọn \texttt{max\_depth=4}}
-\label{fig:tree-max-depth}
-\end{figure}
-
-\section{Improvement 2: điều chỉnh \texttt{min\_samples\_leaf}}
-
-\textbf{What.} Notebook thử các giá trị 1, 2, 3, 4, 5, 6, 8, 10 và 15. Tham
-số buộc mỗi leaf phải có đủ mẫu, hạn chế leaf chỉ đại diện một vài quan sát.
-
-\textbf{Result.} CV chọn \texttt{min\_samples\_leaf=3}. Cây giảm còn depth 6
-và 13 leaf; tuy nhiên test accuracy vẫn là 91,23\%, error rate 8,77\%, trong
-khi malignant recall giảm từ 92,86\% xuống 90,48\%.
-
-\textbf{Why.} Regularization đã giảm độ phức tạp và training accuracy còn
-98,02\%, nhưng ràng buộc này không cải thiện ranh giới quyết định trên test
-split. Một vài leaf nhỏ của baseline có thể vẫn chứa thông tin hữu ích; gộp
-chúng làm thay đổi hai phía của confusion matrix mà không giảm tổng số lỗi.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{tree_min_samples_leaf.png}
-\caption{Decision Tree với \texttt{min\_samples\_leaf=3}}
-\label{fig:tree-min-leaf}
-\end{figure}
-
-\section{Improvement 3: cost-complexity pruning}
-
-\textbf{What.} Các ứng viên \texttt{ccp\_alpha} được lấy từ pruning path của
-training set. Tham số này cân bằng độ phù hợp với dữ liệu và chi phí do thêm
-nhánh; CV chọn mức pruning thay vì nhìn test accuracy.
-
-\textbf{Result.} Giá trị \texttt{ccp\_alpha=0.005934} tạo cây depth 3, 6 leaf.
-Test accuracy đạt 93,86\%, error rate 6,14\%, training accuracy 97,36\% và
-weighted F1 93,84\%. Malignant recall là 90,48\%.
-
-\textbf{Why.} Pruning loại bỏ 13 trong số 19 leaf của baseline và giảm khoảng
-cách train--test còn 3,50 điểm phần trăm. Mô hình tổng quát tốt hơn và dễ đọc
-hơn rõ rệt. Tuy nhiên, mức cắt này bỏ một nhánh giúp phát hiện thêm một ca
-malignant, nên recall malignant thấp hơn mô hình Max Depth.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.92\textwidth]{tree_pruned.png}
-\caption{Decision Tree sau cost-complexity pruning}
-\label{fig:tree-pruned}
-\end{figure}
+\section{Phương pháp 3: Cắt tỉa (Pruning - Cost Complexity Pruning)}
+\begin{itemize}
+    \item \textbf{WHAT:} Áp dụng cắt tỉa với ngưỡng \texttt{ccp\_alpha = 0.005934} để loại bỏ đi các nhánh có ít khả năng mang lại thông tin hữu ích nhưng lại làm tăng độ phức tạp.
+    \item \textbf{RESULT:} Test Accuracy nhảy vọt lên mức 93.86\%. Cấu trúc cây trở nên vô cùng tối giản với độ sâu chỉ vỏn vẹn 3 tầng và 6 lá.
+    \item \textbf{WHY:} Phương pháp pruning loại bỏ trực tiếp các phần phân nhánh không mang lại giá trị gia tăng đáng kể đối với tập validation. Nhờ đó, nó mang lại một cấu trúc cây đơn giản nhất có thể mà vẫn duy trì độ chính xác cao nhất (ngăn ngừa overfitting triệt để).
+\end{itemize}
